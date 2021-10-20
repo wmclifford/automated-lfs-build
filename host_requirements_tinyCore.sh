@@ -1,0 +1,24 @@
+#!/bin/sh
+
+ADDITIONAL_PACKAGES=(
+    compiletc
+    bash
+    bzip2
+    coreutils
+    curl
+    gawk
+    git
+    grep
+    gzip
+    less
+    nano
+    perl5
+    python3.9
+    sed
+    tar
+    texinfo
+    util-linux
+    vim
+    wget
+    xz
+)
