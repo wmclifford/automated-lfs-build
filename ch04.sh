@@ -38,6 +38,7 @@ LC_ALL=POSIX
 LFS_TGT=$(uname -m)-lfs-linux-gnu
 PATH=/usr/bin
 if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
+if [ -h /bin/grep -o -f /bin/busybox ]; then PATH=/usr/local/bin:$PATH; fi
 PATH=$LFS/tools/bin:$PATH
 CONFIG_SITE=$LFS/usr/share/config.site
 export LFS LC_ALL LFS_TGT PATH CONFIG_SITE
