@@ -282,7 +282,7 @@ function ch08_14 () {
 function ch08_15 () {
     echo "(jail) tcl-8.6.11"
     check_running_in_jail
-    extract_source_package tcl
+    extract_source_package tcl src
     tar xf ../tcl8.6.11-html.tar.gz --strip-components=1
     SRCDIR=$(pwd)
     cd unix
@@ -309,7 +309,7 @@ function ch08_15 () {
     make install-private-headers
     ln -sfv tclsh8.6 /usr/bin/tclsh
     mv /usr/share/man/man3/{Thread,Tcl_Thread}.3
-    clean_source_package tcl
+    clean_source_package tcl src
 }
 
 function ch08_16 () {
