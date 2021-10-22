@@ -20,7 +20,7 @@ function clean_source_package () {
         echo "Unable to locate tar archive for package '${srcpkg_pfx}'"
         return 1
     fi
-    local srcpkg_dir=$(tar tf ${srcpkg_tar} | head -n1 | grep -E --only-matching '^(.*?/)')
+    local srcpkg_dir=$(tar tf ${srcpkg_tar} | head -n1 | grep -E --only-matching '^([^/]+?/)')
     if [ -d "./${srcpkg_dir}" ] ; then
         rm -rf ./${srcpkg_dir}
     fi
@@ -35,7 +35,7 @@ function extract_source_package () {
         echo "Unable to locate tar archive for package '${srcpkg_pfx}'"
         return 1
     fi
-    local srcpkg_dir=$(tar tf ${srcpkg_tar} | head -n1 | grep -E --only-matching '^(.*?/)')
+    local srcpkg_dir=$(tar tf ${srcpkg_tar} | head -n1 | grep -E --only-matching '^([^/]+?/)')
     tar xf ${srcpkg_tar}
     if [ ! -d "./${srcpkg_dir}" ] ; then
         echo "Unable to identify the root directory for package '${srcpkg_pfx}'; reading root as '${srcpkg_dir}'"
