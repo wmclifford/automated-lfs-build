@@ -15,7 +15,7 @@ function ch04_02 () {
 # 4.3 Adding the LFS User
 function ch04_03 () {
     create_lfs_group
-    useradd -s /bin/bash -g lfs -m -k /dev/null lfs
+    create_lfs_user
     # passwd lfs
     chown -v lfs ${LFS}/{usr{,/*},lib,var,etc,bin,sbin,tools}
     case $(uname -m) in
@@ -27,9 +27,17 @@ function ch04_03 () {
 
 # 4.4 Setting up the environment
 function ch04_04 () {
+    # If for some reason the home directory was created and the generic
+    # profile file exists, remove it so that it does not get picked up
+    # when logged in as the LFS user.
+    if [ -f ~/.profile ] ; then
+        rm -f ~/.profile
+    fi
+
     cat > ~/.bash_profile << "EOF"
 exec env -i HOME=${HOME} TERM=${TERM} PS1='\u:\w \$ ' /bin/bash
 EOF
+
     cat > ~/.bashrc << "EOF"
 set +h
 umask 022
@@ -64,4 +72,26 @@ function create_lfs_group() {
     # The call signature is the same for both, so we use the command
     # we located using which.
     ${_which_cmd} lfs
+}
+
+function create_lfs_user() {
+    # Determine which utility to use when creating the user.
+    # We prefer useradd over adduser. If neither are available,
+    # then we should exit with an error immediately.
+    if [ -n "$(which useradd)" ] ; then
+        # Found useradd.
+        useradd -s /bin/bash -g lfs -m -k /dev/null lfs
+    elsif [ -n "$(which adduser)" ] ; then
+        # Found adduser.
+        # Remember that this command may report an error about creating the
+        # home directory, saying that it already exists. The error may safely
+        # be ignored. In the off chance that some other error occurred, we
+        # do not send the STDERR contents to /dev/null. Also, even if this
+        # message is reported, the exit code will still be zero.
+        adduser -s /bin/bash -G lfs -k /dev/null -D lfs
+    else
+        # Did not find either utility; abort the process.
+        echo "Unable to locate either useradd or adduser; aborting."
+        exit 1
+    fi
 }
