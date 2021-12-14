@@ -14,7 +14,7 @@ function ch04_02 () {
 
 # 4.3 Adding the LFS User
 function ch04_03 () {
-    groupadd lfs
+    create_lfs_group
     useradd -s /bin/bash -g lfs -m -k /dev/null lfs
     # passwd lfs
     chown -v lfs ${LFS}/{usr{,/*},lib,var,etc,bin,sbin,tools}
@@ -44,4 +44,24 @@ CONFIG_SITE=$LFS/usr/share/config.site
 export LFS LC_ALL LFS_TGT PATH CONFIG_SITE
 EOF
     #source ~/.bash_profile
+}
+
+function create_lfs_group() {
+    # Determine which utility to use when creating the group.
+    # We prefer groupadd over addgroup. If neither are available,
+    # then we should exit with an error immediately.
+    local _which_cmd=$(which groupadd)
+    if [ -z "${_which_cmd}" ] ; then
+        # Not found. Try addgroup.
+        _which_cmd=$(which addgroup)
+    fi
+    if [ -z "${_which_cmd}" ] ; then
+        # That's not there either. We cannot continue.
+        echo "Unable to locate either groupadd or addgroup; aborting."
+        exit 1
+    fi
+    # Ok, so if we got this far, one of the two commands are available.
+    # The call signature is the same for both, so we use the command
+    # we located using which.
+    ${_which_cmd} lfs
 }
