@@ -81,7 +81,7 @@ function create_lfs_user() {
     if [ -n "$(which useradd)" ] ; then
         # Found useradd.
         useradd -s /bin/bash -g lfs -m -k /dev/null lfs
-    elsif [ -n "$(which adduser)" ] ; then
+    elif [ -n "$(which adduser)" ] ; then
         # Found adduser.
         # Remember that this command may report an error about creating the
         # home directory, saying that it already exists. The error may safely
