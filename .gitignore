@@ -1,0 +1,10 @@
+# Ignore logs folder so that we can record the output of each section/stage
+logs/
+
+# Ignore Mac OSX related files
+.DS_Store
+
+# Ignore backup files
+*~
+*.bak
+*.orig
